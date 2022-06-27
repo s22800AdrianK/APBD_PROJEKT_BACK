@@ -41,7 +41,7 @@ namespace Projekt.Configurations
         [Authorize]
         public async Task<IActionResult> GetCompany(string ticker)
         {
-            if (!await _service.DoesTickerExist(ticker)) return StatusCode(404,"Not found");
+            if (!await _service.DoesTickerExist(ticker)) return BadRequest("Not found");
           try
             {
                 return Ok(await _service.GetCompany(ticker));
@@ -60,8 +60,8 @@ namespace Projekt.Configurations
         [Authorize]
         public async Task<IActionResult> GetOHLCs(string ticker, DateTime from, DateTime to, string timespan = "day")
         {
-            if (!await _service.DoesTickerExist(ticker)) return StatusCode(404, "Not found");
-            if (!_service.isFromSmallerThanTo(from, to)) return StatusCode(400, "wrong dates");
+            if (!await _service.DoesTickerExist(ticker)) return BadRequest("Not found");
+            if (!_service.isFromSmallerThanTo(from, to)) return BadRequest("wrong dates");
             try
             {
             return Ok(await _service.GetOHLCs(ticker, from, to,timespan));
@@ -76,7 +76,7 @@ namespace Projekt.Configurations
         [Authorize(Policy = "CorrectUser")]
         public async Task<IActionResult> GetWatchedCompanies(int idUser)
         {
-            if (!await _clientService.DoesClientExists(idUser)) return StatusCode(404, "Not found Client");
+            if (!await _clientService.DoesClientExists(idUser)) return BadRequest("Not found Client");
             return Ok(await _service.GetWatchedCompanies(idUser));
         }
 
@@ -84,8 +84,8 @@ namespace Projekt.Configurations
         [Authorize(Policy = "CorrectUser")]
         public async Task<IActionResult> AddToWatchList(int idUser, string ticker)
         {
-            if (!await _service.DoesTickerExistDB(ticker)) return StatusCode(404, "Not found ticker");
-            if (!await _clientService.DoesClientExists(idUser)) return StatusCode(404, "Not found Client");
+            if (!await _service.DoesTickerExistDB(ticker)) return BadRequest("Not found ticker");
+            if (!await _clientService.DoesClientExists(idUser)) return BadRequest("Not found Client");
             await _service.AddtoWatchlist(ticker,idUser);
             return Ok();
         }
@@ -94,8 +94,9 @@ namespace Projekt.Configurations
         [Authorize(Policy = "CorrectUser")]
         public async Task<IActionResult> DeleteWatchList(int idUser, string ticker)
         {
-            if (!await _service.DoesTickerExistDB(ticker)) return StatusCode(404, "Not found ticker");
-            if (!await _clientService.DoesClientExists(idUser)) return StatusCode(404, "Not found Client");
+            if (!await _service.DoesTickerExistDB(ticker)) return BadRequest("Not found ticker");
+            if (!await _clientService.DoesClientExists(idUser)) return BadRequest("Not found Client");
+            if (!await _service.doesWatchListExist(idUser, ticker)) return BadRequest("this company can't be deleted");
             await _service.DeleteWatchlist(ticker, idUser);
             return Ok();
         }

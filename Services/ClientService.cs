@@ -31,7 +31,8 @@ namespace Projekt.Services
         public async Task<bool> DoesPasswordMatch(Models.DTOs.Client client)
         {
             var c = await _context.Clients.FirstOrDefaultAsync(e => e.Login == client.Login);
-            return client.Password == getHashedSaltedPassword(client.Password, c.Salt);
+            if (c == null) return false;
+            return c.Password == getHashedSaltedPassword(client.Password, c.Salt);
         }
 
         public async Task<bool> DoesRefreashTokenMatch(string refreashToken)

@@ -20,6 +20,7 @@ namespace Projekt.Services
         public Task<bool> DoesTickerExistDB(string ticker);
         public Task<bool> DoesWatchedElementExistinDB(string ticker);
         public Task<List<CompanyDetailed>> GetWatchedCompanies(int IdUser);
+        public Task<bool> doesWatchListExist(int idUser, string ticker);
         public Task AddtoWatchlist(string ticker, int IdUser);
         public Task DeleteWatchlist(string ticker, int IdUser);
         public Task AddWatchElementDB(CompanyDetailed company);

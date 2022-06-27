@@ -208,5 +208,10 @@ namespace Projekt.Services
             entry.State = EntityState.Deleted;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> doesWatchListExist(int idUser, string ticker)
+        {
+            return await _context.watchlists.AnyAsync(e => e.IdUser == idUser && e.ticker == ticker);
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace Projekt.Controllers
         public async Task<IActionResult> Login(Models.DTOs.Client client)
         {
             if (!await _service.IsLogginUnique(client.Login)) return BadRequest("nie ma takiego loginu");
-            if (await _service.DoesPasswordMatch(client)) return BadRequest("Haslo sie nie zgadza");
+            if (!await _service.DoesPasswordMatch(client)) return BadRequest("Haslo sie nie zgadza");
             var c = await _service.Login(client);
             var option = _service.GetOptions(c.IdUser);
             return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(option), c.RefreshToken, Id = c.IdUser });
