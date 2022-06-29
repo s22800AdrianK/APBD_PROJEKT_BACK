@@ -34,7 +34,7 @@ namespace Projekt.Services
             client.DefaultRequestHeaders.Accept.Clear();
             try
             {
-                var streamTask = client.GetStreamAsync($"https://api.polygon.io/v3/reference/tickers?active=true&sort=ticker&order=asc&limit=100&apiKey=1p7pfT07fHfgmupzsl4vHGteG2tEZMh7&ticker={ticker}");
+                var streamTask = client.GetStreamAsync($"https://api.polygon.io/v3/reference/tickers?active=true&sort=ticker&order=asc&limit=100&apiKey={API_KEY}&ticker={ticker}");
                 var t = await streamTask;
                 var res = await JsonSerializer.DeserializeAsync<Results>(await streamTask);
                 return res.results.Count() == 1;

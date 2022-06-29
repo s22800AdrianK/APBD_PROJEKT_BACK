@@ -10,7 +10,7 @@ namespace Projekt.Configurations
 {
     public class OHLCConfiguration : IEntityTypeConfiguration<OHLC>
     {
-        public void Configure(EntityTypeBuilder<OHLC> builder)
+        public void Configure(EntityTypeBuilder<OHLC> builder) 
         {
             builder.HasKey(e => new { e.WatchedElementTicker, e.t });
 
